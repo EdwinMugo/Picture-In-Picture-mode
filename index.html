@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title> picture-picture-mode</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <video id="myvideo" controls> 
+            <source src='./Big Buck Bunny 60fps 4K - Official Blender Foundation Short Film_2.mp4' type="video/mp4">   
+             </video>
+
+             <div>
+                <button id="btn" style="display:none" type="button" > Enter picture-in-picture mode </button>
+             </div>
+        
+        <script>
+            const myvideo = document.querySelector('#myvideo');
+            const btn = document.querySelector('#btn');
+
+            // toggle the btn text when entering andleaving the picture-in-picture mode
+            function updateBtn() {
+                if(document.pictureInPictureElement === myvideo){
+                    btn.textContent = 'Leave picture-in-picture Mode'
+                } else{
+                    btn.textContent = 'Enter picture-in-picture mode'
+                }
+           
+                }
+
+
+            // test if the browser supports picture-in-picture and display the btn
+            if('pictureInPictureEnabled' in document ){
+                btn.style.display= null; 
+
+                // add eventlistener to the button to trigger  picture-in-picture mode
+                btn.addEventListener('click', async() => {
+                    try{
+                        if(document.pictureInPictureElement){
+                        await document.exitPictureInPicture();
+                    }else {
+                        await myvideo.requestPictureInPicture();
+                    } 
+                    updateBtn();
+
+                    } catch(error){
+                        console.log('browser doesnt support picture-in-picture');
+                    }
+                       
+                    });
+                
+            }
+        </script>
+    </body>
+</html>
